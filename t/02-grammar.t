@@ -77,18 +77,20 @@ subtest {
     }
 
     # http://doc.perl6.org/language/grammars#Creating_Grammars
-    # Not working!
+    # WIP
     {
         my $str = q:to/EOI/;
         third=3
         hits=42
         perl=5
         EOI
-        my $res = KeyValuePairs.parse($str, :actions(KeyValuePairsActions)).made;
 
-        for @$res -> $p {
-            say "Key: {$p.key()}, Value: {$p.value()}";
-        }
+        my $actions = KeyValuePairsActions.new;
+        my $res = KeyValuePairs.parse($str, :$actions);
+
+        #for @$res -> $p {
+        #    #say "Key: {$p.key()}, Value: {$p.value()}";
+        #}
     }
 }, 'Test key-value pair';
 
