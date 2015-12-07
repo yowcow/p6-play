@@ -86,3 +86,5 @@ subtest {
     }, 'With actions';
 
 }, 'Test parsing as Grammar';
+
+done-testing;
