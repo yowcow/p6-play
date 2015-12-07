@@ -36,4 +36,21 @@ subtest {
 
 }, 'Test MyClass::MyClass.foobar';
 
+subtest {
+
+    subtest {
+        is MyClass::MyClass.hello, 'hello';
+    }, 'Returns default';
+
+    subtest {
+        is MyClass::MyClass.hello('bye'), 'bye';
+    }, 'Can set a string';
+
+    subtest {
+        my Str $str;
+        is MyClass::MyClass.hello($str), 'what?';
+    }, 'Cannot set if undefined';
+
+}, 'Test MyClass::MyClass.hello';
+
 done-testing;
