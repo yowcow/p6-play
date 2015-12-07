@@ -2,7 +2,7 @@ use v6;
 use Test;
 
 class MyHoge {
-    has $!hoge = '';
+    has Str $!hoge = '';
 
     method get() { $!hoge }
     method set(Str:D :$!hoge) { }
