@@ -43,8 +43,9 @@ subtest {
 
     class MyURLActions {
         method query($/) {
-            my %res = map { my @pair = .split('='); @pair[0] => @pair[1]; }, $0.split('&');
-            make %res;
+            make %(
+                map { %( .split('=').pairup ) }, $0.split('&')
+            );
         }
     }
 
