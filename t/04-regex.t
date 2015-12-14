@@ -43,7 +43,7 @@ subtest {
 
     class MyURLActions {
         method query($/) {
-            $0.split('&') ==> map { .split('=') } ==> my %res;
+            my %res = map { my @pair = .split('='); @pair[0] => @pair[1]; }, $0.split('&');
             make %res;
         }
     }
@@ -81,7 +81,7 @@ subtest {
 
         is $res<scheme>,     'http';
         is $res<query>,      'hoge=hoge&fuga=fuga';
-        is $res<query>.made, (hoge => 'hoge', fuga => 'fuga');
+        is $res<query>.made, %(hoge => 'hoge', fuga => 'fuga');
 
     }, 'With actions';
 
