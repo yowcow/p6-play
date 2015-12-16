@@ -47,9 +47,9 @@ subtest {
 }, 'Test pairup array into hash';
 
 subtest {
-    sub mysub(Str $one, Str $two, Str $three) {
-        (   one => $one,
-            two => $two,
+    sub mysub(Str $one, Str $two, Str $three) returns Hash {
+        %(  one   => $one,
+            two   => $two,
             three => $three
         );
     }
@@ -73,6 +73,13 @@ subtest {
         dies-ok { mysub(|@items) };
 
     }, 'Fails with 2 variables';
+
+    subtest {
+        my Int @items = 1 .. 3;
+
+        dies-ok { mysub(|@items) };
+
+    }, 'Fails with wrong type';
 
 }, 'Test flatten array into variables';
 
