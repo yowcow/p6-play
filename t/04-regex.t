@@ -32,19 +32,20 @@ subtest {
 
     grammar MyURL {
         token TOP {
-            <scheme> '://' <hostname> [':' <port>]? [<path>]? ['?' <query>]?
+            <scheme> '://' <hostname> [':' <port>]? [<path>]? ['?' <query>]? ['#' <hoge>]?
         }
         token scheme   { http | https | ftp | sftp }
         token hostname { <-[\/\:]>+ }
         token port     { \d+ }
         token path     { <-[\?]>+ }
-        token query    { ( .+ ) }
+        token query    { <-[\#]>+ }
+        token hoge     { .+ }
     }
 
     class MyURLActions {
         method query($/) {
             make %(
-                map { %( .split('=').pairup ) }, $0.split('&')
+                map { %( .split('=').pairup ) }, $/.split('&')
             );
         }
     }
