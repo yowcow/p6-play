@@ -60,4 +60,18 @@ subtest {
 
 }, 'Test reading line-by-line';
 
+subtest {
+
+    my $fh = open 't/data/numbers.txt', :r;
+
+    my Int $sum = 0;
+
+    while $fh.get -> $line {
+        $sum += $line;
+    }
+
+    is $sum, 36;
+
+}, 'Test sum up numbers in file';
+
 done-testing;
