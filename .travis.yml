@@ -2,3 +2,6 @@ language: perl6
 
 perl6:
   - latest
+
+before_script:
+  - panda install JSON::Tiny
