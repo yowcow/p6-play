@@ -32,6 +32,12 @@ END
 
 subtest {
 
+    dies-ok { open 't/path/to/hoge.txt' };
+
+}, 'Test `open` on non-existing file';
+
+subtest {
+
     my $fh = open 't/data/test.txt';
 
     subtest {
