@@ -1,5 +1,4 @@
 use v6;
-use JSON::Tiny;
 use Test;
 
 subtest {

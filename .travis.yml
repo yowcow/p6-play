@@ -3,6 +3,5 @@ language: perl6
 perl6:
   - latest
 
-before_script:
-  - rakudobrew build-panda
-  - panda install JSON::Tiny
+#before_script:
+#  - rakudobrew build-panda
