@@ -83,7 +83,7 @@ subtest {
 
         is $res<scheme>,     'http';
         is $res<query>,      'hoge=hoge&fuga=fuga';
-        is $res<query>.made, %(hoge => 'hoge', fuga => 'fuga');
+        is $res<query>.made, { hoge => 'hoge', fuga => 'fuga' };
 
     }, 'With actions';
 

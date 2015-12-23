@@ -35,8 +35,8 @@ subtest {
         is %hash.WHAT, Hash[Int];
         ok %hash.defined;
         ok !%hash<hoge>.defined;
-        is %hash.keys, ();
-        is-deeply %hash, %();
+        is %hash.keys, [];
+        is-deeply %hash, {};
     }, 'Initial state';
 
     %hash<hoge> = 123;
@@ -44,8 +44,8 @@ subtest {
     subtest {
         ok %hash.defined;
         ok %hash<hoge>.defined;
-        is %hash.keys, (<hoge>);
-        is-deeply %hash, %(hoge => 123);
+        is %hash.keys, <hoge>;
+        is-deeply %hash, { hoge => 123 };
     }, 'After assigning hoge=>123';
 
     %hash<hoge> = Nil;
@@ -54,7 +54,7 @@ subtest {
         ok %hash.defined;
         ok !%hash<hoge>.defined;
         is %hash.keys, <hoge>;
-        is-deeply %hash, %(hoge => Int);
+        is-deeply %hash, { hoge => Int };
     }, 'After assigning hoge=>Nil';
 
     my $res = %hash<hoge>:delete;
@@ -65,8 +65,8 @@ subtest {
     subtest {
         ok %hash.defined;
         ok !%hash<hoge>.defined;
-        is %hash.keys, ();
-        is-deeply %hash, %();
+        is %hash.keys, [];
+        is-deeply %hash, {};
     }, 'After deleting hash key';
 
 }, 'Test Hash';
