@@ -30,4 +30,12 @@ subtest {
 
 }, 'Test gather for';
 
+subtest {
+
+    my @items = (0 .. Inf).map(-> $val { $val * 2 })[3 .. 5];
+
+    is-deeply @items, [6, 8, 10];
+
+}, 'Test map';
+
 done-testing;
