@@ -16,6 +16,75 @@ subtest {
 }, 'Test matching chars';
 
 subtest {
+
+    my Str $str = 'Perl6';
+
+    # Lower-case letter OR number
+    if $str ~~ m{ \w+ (<:Ll+:N>) } {
+        is ~$0, 6;
+    }
+    else {
+        fail 'Should match "6"';
+    }
+
+}, 'Combination of unicode properties';
+
+subtest {
+
+    ok !Bool('a'     ~~ / a ** 2..4 /);
+    ok Bool('aa'     ~~ / a ** 2..4 /);
+    ok Bool('aaa'    ~~ / a ** 2..4 /);
+    ok Bool('aaaa'   ~~ / a ** 2..4 /);
+    ok Bool('aaaaa'  ~~ / a ** 2..4 /);
+
+}, 'Test quantifier';
+
+subtest {
+
+    ok Bool('There were a young man' ~~ / man $$ /);
+    ok !Bool('There were a young man' ~~ / ^^ man /);
+
+    ok Bool('There were' ~~ m:i/ ^^ there /);
+    ok !Bool('There were' ~~ m:i/ there $$ /);
+}, 'Test anchors';
+
+subtest {
+
+    subtest {
+
+        if 'abc' ~~ / ( a || b ) (c) / {
+            is ~$0, 'b';
+            is ~$1, 'c';
+        }
+        else {
+            fail 'Should match';
+        }
+
+    }, 'Capturing';
+
+    subtest {
+
+        if 'abc' ~~ / [ a || b ] (c) / {
+            is ~$0, 'c';
+        }
+        else {
+            fail 'Should match';
+        }
+
+    }, 'Non-capturing';
+
+}, 'Test capturing/non-capturing grouping';
+
+subtest {
+
+    my $str = 'The quick brown fox';
+
+    ok Bool($str ~~ /own >>/);
+    ok !Bool($str ~~ /<< own/);
+
+}, 'Test boundary';
+
+subtest {
     my Str $url = 'http://hogehoge.com/path/to/something';
 
     if $url ~~ / ^ http\:\/\/ ( <-[\/]>+ ) \/ (.+) / {
