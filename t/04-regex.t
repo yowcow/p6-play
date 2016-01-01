@@ -79,10 +79,44 @@ subtest {
 
     my $str = 'The quick brown fox';
 
-    ok Bool($str ~~ /own >>/);
-    ok !Bool($str ~~ /<< own/);
+    ok Bool($str ~~ m/own >>/);
+    ok !Bool($str ~~ m/<< own/);
 
 }, 'Test boundary';
+
+subtest {
+
+    my $str = 'a1xa2xa3';
+
+    $str ~~ m{ a. };
+
+    is ~$/, 'a1';
+
+    $str ~~ m:c(4){ a. }; # 1st match after position 4
+
+    is ~$/, 'a3';
+
+}, 'Test continue';
+
+subtest {
+
+    my $str = 'several words here';
+
+    subtest {
+        my @matches = $str ~~ m{ \w+ };
+
+        is @matches.elems, 1;
+
+    }, 'Non-global';
+
+    subtest {
+        my @matches = $str ~~ m:global{ \w+ };
+
+        is @matches.elems, 3;
+
+    }, 'Global';
+
+}, 'Test global';
 
 subtest {
     my Str $url = 'http://hogehoge.com/path/to/something';
