@@ -60,12 +60,20 @@ subtest {
         token TOP {
             [<pair> \n+]*
         }
-        token ws { \h* }
+        token ws         { \h* }
         token identifier { \w+ }
-        rule pair { <key=.identifier> \h* '=' \h* <value=.identifier> }
+        rule  pair       { <key=.identifier> '=' <value=.identifier> }
     }
 
-    {
+    class KeyValuePairsActions {
+        method TOP($/) {
+            $/.make: $/<pair>.list.map(-> $item {
+                { key => ~$item<key>, value => ~$item<value> }
+            });
+        }
+    }
+
+    subtest {
         my $str = q:to/EOI/;
         second=2
         hits=42
@@ -90,29 +98,26 @@ subtest {
             { key => 'perl',   value => '6' },
             { key => 'hoge',   value => 'fuga' },
         ];
-    }
+    }, 'Test grammar';
 
-    class KeyValuePairsActions {
-        method key($/)   { $/.make('hoge' ~~ $/) }
-        method value($/) { $/.make(10 + $/) }
-        method pair($/)  { $/.make($<key>.made => $<value>.made) }
-        method TOP($/)   { $/.make($<pair>>>.made) }
-    }
-
-    # http://doc.perl6.org/language/grammars#Creating_Grammars
-    # WIP
-    {
+    subtest {
         my $str = q:to/EOI/;
         third=3
-        hits=42
-        perl=5
+        hits = 42
+        perl = 5
         EOI
 
         my $actions = KeyValuePairsActions.new;
-        my $res = KeyValuePairs.parse($str, :$actions);
+        my $res = KeyValuePairs.parse($str, actions => $actions);
 
-        $res<pair>.list ==> map { .hash } ==> my @result;
-    }
+        is $res.made, [
+            { key => 'third', value => '3' },
+            { key => 'hits',  value => '42' },
+            { key => 'perl',  value => '5' },
+        ];
+
+    }, 'Test grammar + actions';
+
 }, 'Test key-value pair';
 
 done-testing;
