@@ -119,6 +119,28 @@ subtest {
 }, 'Test global';
 
 subtest {
+
+    my $str = 'foobar';
+
+    subtest {
+        ok Bool($str ~~ m{ foo <?before bar> });
+    }, 'foo comes before bar';
+
+    subtest {
+        ok !Bool($str ~~ m{ bar <?before foo> });
+    }, 'bar doesnt come before foo';
+
+    subtest {
+        ok Bool($str ~~ m{ <?after foo> bar });
+    }, 'bar comes after foo';
+
+    subtest {
+        ok !Bool($str ~~ m{ <?after bar> foo });
+    }, 'bar doesnt come after foo';
+
+}, 'Test before/after';
+
+subtest {
     my Str $url = 'http://hogehoge.com/path/to/something';
 
     if $url ~~ / ^ http\:\/\/ ( <-[\/]>+ ) \/ (.+) / {
