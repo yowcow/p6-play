@@ -175,7 +175,7 @@ subtest {
         ok so MyWS.parse("a\tb .");
         ok !so MyWS.parse("a\tb\n.");
 
-    }, 'With no override on ws';
+    }, 'With override on ws';
 
 }, 'Test token ws';
 
