@@ -141,6 +141,45 @@ subtest {
 }, 'Test before/after';
 
 subtest {
+
+    subtest {
+        ok Bool(' ' ~~ / \h /);
+    }, 'Match \h';
+
+    subtest {
+        ok !Bool("\n" ~~ / \h /);
+    }, 'No match \h';
+
+    subtest {
+        ok Bool(' ' ~~ / <.ws>/);
+    }, 'Match <.ws>';
+
+    subtest {
+        ok Bool("\n" ~~ / <.ws> /);
+    }, 'No match <.ws>';
+
+    subtest {
+        grammar MyWS {
+            token ws {
+                <!ww>
+                \h*
+            }
+            rule TOP {
+                a b '.'
+            }
+        }
+
+        ok !so MyWS.parse('ab.');
+        ok so MyWS.parse('a b.');
+        ok so MyWS.parse('a b .');
+        ok so MyWS.parse("a\tb .");
+        ok !so MyWS.parse("a\tb\n.");
+
+    }, 'With no override on ws';
+
+}, 'Test token ws';
+
+subtest {
     my Str $url = 'http://hogehoge.com/path/to/something';
 
     if $url ~~ / ^ http\:\/\/ ( <-[\/]>+ ) \/ (.+) / {
