@@ -4,30 +4,36 @@ use Test;
 subtest {
     my regex number { \d+ [ \. \d+ ]? }
 
-    say "31.51" ~~ &number;
-    say "15 + 4.5" ~~ / <number> \s* '+' \s* <number> /;
+    ok so "31.51" ~~ &number;
 
-    pass 'number';
+    ok so "15 + 4.5" ~~ / <number> \s* '+' \s* <number> /;
+    is $/<number>.list, ['15', '4.5'];
+
 }, 'Test regex';
 
 subtest {
+
     my regex works-but-slow { .+ q }
     my token fails-but-fast { .+ q }
+
     my $s = 'Tokens won\'t backtrack, which makes them fail quicker!';
 
     is so $s ~~ &works-but-slow, True;
     is so $s ~~ &fails-but-fast, False;
-}, 'Test token';
+
+}, 'Test retex and token';
 
 subtest {
+
     my token non-space-y { 'once' 'upon' 'a' 'time' }
     my rule  space-y     { 'once' 'upon' 'a' 'time' }
 
-    say 'onceuponatime' ~~ &non-space-y;
-    say 'onceuponatime' ~~ &space-y;
-    say 'once upon a time' ~~ &non-space-y;
-    say 'once upon a time' ~~ &space-y;
-}, 'Test rule';
+    ok so 'onceuponatime' ~~ &non-space-y;
+    ok !so 'onceuponatime' ~~ &space-y;
+    ok !so 'once upon a time' ~~ &non-space-y;
+    ok so 'once upon a time' ~~ &space-y;
+
+}, 'Test rule and token';
 
 subtest {
 
@@ -37,16 +43,17 @@ subtest {
 
     class TestActions {
         method TOP($/) {
-            $/.make(2 + $/);
+            $/.make: 2 + $/;
         }
     }
 
     my $actions = TestActions.new;
     my $match   = TestGrammar.parse('40', :$actions);
 
-    say $match;
+    is $match, 40;
     is $match.made, 42;
-}, 'Test grammar';
+
+}, 'Test simple grammar and action';
 
 subtest {
     grammar KeyValuePairs {
@@ -54,8 +61,8 @@ subtest {
             [<pair> \n+]*
         }
         token ws { \h* }
-        rule pair { <key=.identifier> '=' <value=.identifier> }
         token identifier { \w+ }
+        rule pair { <key=.identifier> \h* '=' \h* <value=.identifier> }
     }
 
     {
@@ -63,10 +70,26 @@ subtest {
         second=2
         hits=42
         perl=6
+        hoge = fuga
         EOI
 
         my $res = KeyValuePairs.parse($str);
-        $res.say;
+
+        is $res<pair>.elems, 4;
+
+        is $res<pair>[0].hash, { key => 'second', value => '2' };
+        is $res<pair>[1].hash, { key => 'hits', value => '42' };
+        is $res<pair>[2].hash, { key => 'perl', value => '6' };
+        is $res<pair>[3].hash, { key => 'hoge', value => 'fuga' };
+
+        $res<pair>.list ==> map { .hash } ==> my @result;
+
+        is @result, [
+            { key => 'second', value => '2' },
+            { key => 'hits',   value => '42' },
+            { key => 'perl',   value => '6' },
+            { key => 'hoge',   value => 'fuga' },
+        ];
     }
 
     class KeyValuePairsActions {
@@ -88,9 +111,7 @@ subtest {
         my $actions = KeyValuePairsActions.new;
         my $res = KeyValuePairs.parse($str, :$actions);
 
-        #for @$res -> $p {
-        #    #say "Key: {$p.key()}, Value: {$p.value()}";
-        #}
+        $res<pair>.list ==> map { .hash } ==> my @result;
     }
 }, 'Test key-value pair';
 
