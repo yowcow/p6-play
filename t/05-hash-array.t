@@ -102,4 +102,15 @@ subtest {
 
 }, 'Test array';
 
+subtest {
+    my @array = 1 .. 4;
+
+    is @array, [1 .. 4];
+
+    @array[1] += @array.splice(2, 1)[0];
+
+    is @array, [1, 5, 4];
+
+}, 'Test splice array';
+
 done-testing;
