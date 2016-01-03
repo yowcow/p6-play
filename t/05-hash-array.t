@@ -18,9 +18,10 @@ subtest {
 
 subtest {
     sub myhash(*@items) returns Hash {
-        %(  map {
-                %( .split('=').pairup );
-            }, @items
+        %(
+            @items.map(-> $item {
+                %( $item.split('=').pairup )
+            })
         );
     }
 
