@@ -71,4 +71,31 @@ subtest {
 
 }, 'Test Hash';
 
+subtest {
+
+    subtest {
+        my Str @items = "hoge-fuga_foo-bar".split(/\-|_/);
+
+        is-deeply @items, Array[Str].new(<hoge fuga foo bar>);
+
+    }, 'Split returns array of Str';
+
+    subtest {
+        my Str $original = "HOGE-fuga_FOO-bar";
+
+        my @result = $original.split(/\-|_/).map(-> $word { $word.tclc });
+
+        is-deeply @result, [<Hoge Fuga Foo Bar>];
+        is @result.join('::'), 'Hoge::Fuga::Foo::Bar';
+
+    }, 'Split, map, tclc';
+
+    subtest {
+
+        my Str $original = "HOGEFugaFOOBarBUZ";
+
+    }, 'Split, map, join';
+
+}, 'Test string';
+
 done-testing;
