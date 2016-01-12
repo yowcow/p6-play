@@ -9,4 +9,4 @@ build-panda:
 	rakudobrew build-panda
 
 test:
-	prove -e perl6 -r t
+	prove
