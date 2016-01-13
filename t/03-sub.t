@@ -37,4 +37,16 @@ subtest {
 
 }, 'Test set';
 
+subtest {
+
+    sub hoge(@items --> Hash) {
+        % = @items.map({ $_ => 'hoge' });
+    }
+
+    my %res = hoge(<foo bar>);
+
+    is %res, { foo => 'hoge', bar => 'hoge' };
+
+}, 'Test implicit variable?';
+
 done-testing;
