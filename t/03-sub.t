@@ -49,4 +49,14 @@ subtest {
 
 }, 'Test implicit variable?';
 
+subtest {
+
+    sub hoge(Int(Cool) $number) {
+        is $number, 22;
+    }
+
+    hoge('22');
+
+}, 'Test coersion';
+
 done-testing;
