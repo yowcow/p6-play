@@ -59,4 +59,53 @@ subtest {
 
 }, 'Test coersion';
 
+subtest {
+
+    sub hoge(%something is copy) {
+
+        is-deeply %something, {
+            hoge => 'fuga',
+            fuga => {
+                'hoge' => 'hoge',
+            },
+        };
+
+        %something<fuga> = 'hoge';
+    }
+
+    sub fuga(%something) {
+
+        is-deeply %something, {
+            hoge => 'fuga',
+            fuga => {
+                'hoge' => 'hoge',
+            },
+        };
+
+        %something<fuga> = 'hoge';
+    }
+
+    my %hash =
+        hoge => 'fuga',
+        fuga => {
+            hoge => 'hoge',
+        };
+    hoge(%hash);
+
+    is-deeply %hash, {
+        hoge => 'fuga',
+        fuga => {
+            hoge => 'hoge',
+        }
+    }, 'No destruction if param is copy';
+
+    fuga(%hash);
+
+    is-deeply %hash, {
+        hoge => 'fuga',
+        fuga => 'hoge',
+    }, 'Destroyed if param is a reference';
+
+}, 'Test passing as reference and copy';
+
 done-testing;
