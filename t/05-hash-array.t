@@ -113,4 +113,16 @@ subtest {
 
 }, 'Test splice array';
 
+subtest {
+
+    my @items = [
+        { hoge => 'hoge1' },
+        { hoge => 'hoge2' },
+        { hoge => 'hoge3' },
+        { hoge => 'hoge4' },
+    ];
+
+    is @items>><hoge>, <hoge1 hoge2 hoge3 hoge4>;
+}, 'Test >>';
+
 done-testing;
