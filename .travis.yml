@@ -3,5 +3,9 @@ language: perl6
 perl6:
   - latest
 
+install:
+  - rakudobrew build panda
+  - panda --notests --force install HTTP::UserAgent URI
+
 script:
   - make test
