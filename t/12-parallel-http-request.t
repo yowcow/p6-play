@@ -10,14 +10,14 @@ my Str @urls =
     "http://ho.beaconsco.com/";
 
 my @p = (for @urls -> $url {
-    my $uri = URI.new($url);
+    my URI $uri .= new($url);
 
     start {
         say "Making request to {$uri}...";
 
-        my $ua = HTTP::UserAgent.new;
-        my $req = HTTP::Request.new(GET => $uri);
-        my $res = $ua.request: $req;
+        my HTTP::UserAgent $ua .= new;
+        my HTTP::Request  $req .= new(GET => $uri);
+        my HTTP::Response $res  = $ua.request($req);
 
         say "Got response from $uri with status code: {$res.code}";
 
