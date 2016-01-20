@@ -83,4 +83,32 @@ subtest {
 
 }, 'Test creating Promise with `start`';
 
+subtest {
+    my $p = Promise.allof(
+        Promise.in(1),
+        Promise.in(2),
+    );
+
+    say "Starting...";
+
+    await $p;
+
+    say "All done";
+
+}, 'Test Promise.allof';
+
+subtest {
+    my $p = Promise.anyof(
+        Promise.in(1),
+        Promise.in(1000),
+    );
+
+    say "Starting...";
+
+    await $p;
+
+    say "Some done!";
+
+}, 'Test Promise.anyof';
+
 done-testing;
