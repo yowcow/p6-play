@@ -108,4 +108,18 @@ subtest {
 
 }, 'Test passing as reference and copy';
 
+subtest {
+
+    sub myreverse(Str:D $given --> Str:D) {
+        my Int $last-idx = $given.chars - 1;
+        (for (0 .. $last-idx).map({ $last-idx - $_ }) -> $i {
+            $given.substr($i, 1)
+        }).join;
+    }
+
+    is myreverse('abcd'),       'dcba';
+    is myreverse('あいうえお'), 'おえういあ';
+
+}, 'Test reversing';
+
 done-testing;
