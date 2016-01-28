@@ -17,6 +17,15 @@ subtest {
 }, 'Test variable into hash';
 
 subtest {
+    my $hash1 = { hoge => 'fuga' };
+    my $hash2 = { fuga => 'hoge' };
+    my %result = %$hash1, %$hash2;
+
+    is-deeply %result, { hoge => 'fuga', fuga => 'hoge' };
+
+}, 'Test merging hash';
+
+subtest {
     sub myhash(*@items) returns Hash {
         %(
             @items.map(-> $item {
